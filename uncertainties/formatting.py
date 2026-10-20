@@ -1,5 +1,6 @@
 from math import isinf, isnan, isfinite
 import math
+from decimal import Decimal
 import re
 
 
@@ -1011,7 +1012,15 @@ def format_ufloat(ufloat_to_format, format_spec):
     # exponent should be used.
 
     if use_exp:
-        nom_val_mantissa = nom_val / common_factor
+        # Shift the decimal point exactly instead of dividing by
+        # common_factor: the division can add binary noise
+        # (7e-5/1e-5 == 6.999999999999999), which shows up when the
+        # nominal value is printed with its full repr (special
+        # std_dev, default format).
+        if isfinite(nom_val):
+            nom_val_mantissa = float(Decimal(repr(nom_val)).scaleb(-common_exp))
+        else:
+            nom_val_mantissa = nom_val / common_factor
         std_dev_mantissa = std_dev / common_factor
         # Limit for the last digit of the mantissas:
         signif_limit = digits_limit - common_exp

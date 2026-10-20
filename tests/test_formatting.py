@@ -454,6 +454,12 @@ formatting_cases = [  # (Nominal value, uncertainty): {format: result,...}
     # ',' format option: introduced in Python 2.7
     (123456.789123, 1234.5678, ",f", "123,457+/-1,235"),  # PDG convention
     (123456.789123, 1234.5678, ",.4f", "123,456.7891+/-1,234.5678"),
+    # The factored-out mantissa must not carry float division noise
+    # (7e-5 / 1e-5 == 6.999999999999999) when the nominal value is
+    # printed in full because the standard deviation is special:
+    (7e-5, float("nan"), "", "(7.0+/-nan)e-05"),
+    (1.1e-5, float("inf"), "", "(1.1+/-inf)e-05"),
+    (1.6e-19, float("nan"), "", "(1.6+/-nan)e-19"),
 ]
 
 

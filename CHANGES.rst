@@ -1,6 +1,16 @@
 Change Log
 ===================
 
+Unreleased
+-----------------------
+
+Fixes:
+
+- Fixes float noise in the factored-out mantissa when a value with a ``nan``, ``inf``
+  or zero standard deviation is printed in exponent form, e.g.
+  ``str(ufloat(7e-5, float("nan")))`` gave ``(6.999999999999999+/-nan)e-05`` instead
+  of ``(7.0+/-nan)e-05``.
+
 3.2.4   2026-January-9
 -----------------------
 
